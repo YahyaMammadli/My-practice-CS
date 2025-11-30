@@ -16,7 +16,7 @@
         public void Register()
         {
 
-            Console.Write(" Type your name => ");
+            Console.Write("\n Type your name => ");
             name = Console.ReadLine();
 
             Console.Write("\n");
@@ -36,7 +36,7 @@
 
 
             string upperLastname = lastname.ToUpper();
-            string firstTwoLetters = name.Substring(0, 2).ToLower(); 
+            string firstTwoLetters = name.Substring(0, 2).ToLower();
 
             username = upperLastname + "_" + age + "_" + firstTwoLetters;
 
@@ -54,14 +54,14 @@
 
         }
 
-        
+
         string GeneratePassword()
         {
 
 
             Random random = new Random();
 
-            string allLetters = "abcdefghijABCDEFGHIJKLMNOklmnopqrstuvwxyzPQRSTUVWXYZ"; 
+            string allLetters = "abcdefghijABCDEFGHIJKLMNOklmnopqrstuvwxyzPQRSTUVWXYZ";
 
 
             string newpassword = "";
@@ -119,12 +119,19 @@
 
     class Login
     {
-
-
+        string password;
+        string username;
         int attempts = 3;
 
 
-        public bool Authenticate(string username, string password)
+
+        public Login(string username, string password)
+        {
+            this.username = username;
+            this.password = password;
+        }
+
+        public bool Authenticate()
         {
 
             while (attempts > 0)
@@ -237,8 +244,8 @@
 
                         else
                         {
-                            Login login = new Login();
-                            login.Authenticate(savedusername, savedpassword);
+                            Login login = new Login(savedusername, savedpassword);
+                            login.Authenticate();
                         }
                         break;
 
