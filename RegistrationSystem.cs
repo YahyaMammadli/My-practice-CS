@@ -1,58 +1,17 @@
-﻿namespace Program
+﻿using System.Reflection.Metadata;
+using System.Xml.Linq;
+
+namespace Program
 {
 
 
     class SignIn
     {
-        string username = "N/A";
-        string password = "N/A";
+        protected string username = "N/A";
+        protected string password = "N/A";
         string name = "N/A";
         string lastname = "N/A";
         int age = 0;
-
-
-
-
-        public void Register()
-        {
-
-            Console.Write("\n Type your name => ");
-            name = Console.ReadLine();
-
-            Console.Write("\n");
-
-
-            Console.Write(" Type your lastname => ");
-            lastname = Console.ReadLine();
-
-            Console.Write("\n");
-
-
-            Console.Write(" Type your age => ");
-            age = Int32.Parse(Console.ReadLine());
-
-            Console.Write("\n");
-
-
-
-            string upperLastname = lastname.ToUpper();
-            string firstTwoLetters = name.Substring(0, 2).ToLower();
-
-            username = upperLastname + "_" + age + "_" + firstTwoLetters;
-
-
-            password = GeneratePassword();
-
-
-            Console.Write("\n\n Registration successful!\n\n");
-            Console.Write($" Username => {username}\n");
-            Console.Write($" Password => {password}\n");
-
-
-
-
-
-        }
 
 
         string GeneratePassword()
@@ -89,13 +48,47 @@
         }
 
 
+        public void Register(string name, string lastname, int age)
+        {
 
-        public string GetUsername()
+            
+
+
+
+            string upperLastname = lastname.ToUpper();
+            string firstTwoLetters = name.Substring(0, 2).ToLower();
+
+            username = upperLastname + "_" + age + "_" + firstTwoLetters;
+
+
+            password = GeneratePassword();
+
+
+            Console.Write("\n\n Registration successful!\n\n");
+            Console.Write($" Username => {username}\n");
+            Console.Write($" Password => {password}\n");
+
+
+            
+
+
+
+
+
+        }
+
+
+
+       
+
+
+
+        protected string GetUsername()
         {
             return username;
         }
 
-        public string GetPassword()
+        protected string GetPassword()
         {
             return password;
         }
@@ -117,38 +110,22 @@
 
 
 
-    class Login
+    class Login : SignIn
     {
-        string password;
-        string username;
+
         int attempts = 3;
 
 
 
-        public Login(string username, string password)
-        {
-            this.username = username;
-            this.password = password;
-        }
+       
 
-        public bool Authenticate()
+        public bool Authenticate(string intputusername, string intputpassword)
         {
 
             while (attempts > 0)
             {
 
-                Console.Write("\n\n Type username => ");
-
-                string intputusername = Console.ReadLine();
-
-                Console.Write("\n");
-
-
-                Console.Write(" Type password => ");
-
-                string intputpassword = Console.ReadLine();
-
-                Console.Write("\n");
+               
 
 
                 if (intputusername == username && intputpassword == password)
@@ -188,6 +165,102 @@
 
 
 
+    class RunSystem : Login
+    {
+
+        
+
+        public void Run()
+        {
+            while (true)
+            {
+                Console.Write(" \n 1. Sign In\n");
+                Console.Write(" 2. Log In\n");
+                Console.Write("\n");
+                Console.Write(" Select option => ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+
+
+                    case "1":
+                        
+
+
+                        Console.Write("\n Type your name => ");
+                        String name = Console.ReadLine();
+
+                        Console.Write("\n");
+
+
+                        Console.Write(" Type your lastname => ");
+                        String lastname = Console.ReadLine();
+
+                        Console.Write("\n");
+
+
+                        Console.Write(" Type your age => ");
+                        int age = Int32.Parse(Console.ReadLine());
+
+                        Console.Write("\n");
+
+                        Register(name, lastname, age);
+
+                        
+
+
+
+                        break;
+
+
+
+                    case "2":
+
+
+                        if (username == "N/A" && password == "N/A")
+                        {
+                            Console.Write("No registered users!\n");
+                        }
+
+
+                        else
+                        {
+                            
+
+                            Console.Write("\n\n Type username => ");
+
+                            string intputusername = Console.ReadLine();
+
+                            Console.Write("\n");
+
+
+                            Console.Write(" Type password => ");
+
+                            string intputpassword = Console.ReadLine();
+
+                            Console.Write("\n");
+
+                            Authenticate(intputusername, intputpassword);
+                        }
+                        break;
+
+
+
+                    default:
+                        Console.Write("\n Invalid option\n");
+                        break;
+                }
+
+
+            }
+        }
+        
+
+}
+
+
 
 
 
@@ -205,60 +278,12 @@
         static void Main()
         {
 
-            string savedusername = null;
-            string savedpassword = null;
+            
 
 
-            while (true)
-            {
-                Console.Write(" \n 1. Sign In\n");
-                Console.Write(" 2. Log In\n");
-                Console.Write("\n");
-                Console.Write(" Select option => ");
+            RunSystem r = new RunSystem();
 
-                string choice = Console.ReadLine();
-
-                switch (choice)
-                {
-
-
-                    case "1":
-                        SignIn signIn = new SignIn();
-                        signIn.Register();
-                        savedusername = signIn.GetUsername();
-                        savedpassword = signIn.GetPassword();
-
-
-                        break;
-
-
-
-                    case "2":
-
-
-                        if (savedusername == null)
-                        {
-                            Console.Write("No registered users!\n");
-                        }
-
-
-                        else
-                        {
-                            Login login = new Login(savedusername, savedpassword);
-                            login.Authenticate();
-                        }
-                        break;
-
-
-
-                    default:
-                        Console.Write("\n Invalid option\n");
-                        break;
-                }
-
-
-            }
-
+            r.Run();
 
 
 
